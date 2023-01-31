@@ -4,9 +4,10 @@ import 'package:telephony/telephony.dart';
 import 'package:http/http.dart' as http;
 import '../main.dart';
 import '../models/MessageModel.dart';
+import 'package:vibration/vibration.dart';
 
 onBackgroundMessage(SmsMessage message) {
-  debugPrint("onBackgroundMessage called");
+    Vibration.vibrate(duration: 500);
 }
 
 class HomePage extends StatefulWidget {
@@ -25,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     telephony.listenIncomingSms(
-        onNewMessage: onMessage, listenInBackground: false);
+        onNewMessage: onMessage, onBackgroundMessage: onBackgroundMessage);
     super.initState();
   }
 
@@ -46,7 +47,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.only(left: 10, top: 10),
+          padding: const EdgeInsets.only(left: 10, top: 10),
           alignment: Alignment.topLeft,
           child:
               (_futureMessage == null) ? buildColumn() : buildFutureBuilder(),
@@ -73,44 +74,42 @@ class _HomePageState extends State<HomePage> {
           return Container(
             padding: EdgeInsets.only(left: 20.0, top: 20),
             alignment: Alignment.topLeft,
-            width: 390,
+            width: 350,
             height: 300,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               color: Colors.black,
             ),
-            child: Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Sender: " + snapshot.data!.address,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 18),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Sender: " + snapshot.data!.address,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        snapshot.data!.body,
+                        style: const TextStyle(
+                          color: Colors.white54,
+                          fontSize: 15,
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          snapshot.data!.body,
-                          style: const TextStyle(
-                            color: Colors.white54,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
           );
         } else if (snapshot.hasError) {
