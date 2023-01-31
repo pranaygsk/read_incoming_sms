@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:read_incoming_sms/pages/home_page.dart';
+import 'package:telephony/telephony.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: HomePage(),
     );
